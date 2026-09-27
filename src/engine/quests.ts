@@ -1,5 +1,6 @@
 import { MIN_TIMER_DAYS, perStep } from './balance'
 import { evalCond } from './conditions'
+import { unlock } from './unlocks'
 import { applyEffects } from './effects'
 import { C } from './registry'
 import { rand } from './rng'
@@ -24,6 +25,7 @@ export function startQuest(state: GameState, id: string): boolean {
     history: [],
   }
   state.quests[id] = q
+  if (def.kind === 'main') unlock(state, 'journal')
   notify(state, `New quest: ${def.title}`, 'quest')
   if (!state.trackedQuest || def.kind === 'main') {
     const tracked = state.trackedQuest ? C.quests.get(state.trackedQuest) : undefined

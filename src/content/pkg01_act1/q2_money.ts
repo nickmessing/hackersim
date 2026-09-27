@@ -283,7 +283,7 @@ const firstMoneyQuest: QuestDef = {
   stages: {
     choose: {
       text: 'Two doors to your first dollar: CompCastle’s service bench, or Corvid’s starter contract. Pick one, or walk through both.',
-      onEnter: [{ scene: 'a1_first_money' }],
+      onEnter: [{ unlock: ['jobs', 'ops'] }, { scene: 'a1_first_money' }],
       objectives: [
         {
           id: 'door',
@@ -328,7 +328,7 @@ const firstUpgradeQuest: QuestDef = {
   stages: {
     spend: {
       text: 'Open the e-Shop and buy one thing that makes you better — a faster modem, more RAM, a book, a decent chair. The wheel starts turning here.',
-      onEnter: [{ scene: 'a1_first_upgrade' }],
+      onEnter: [{ unlock: 'shop' }, { scene: 'a1_first_upgrade' }],
       objectives: [
         {
           id: 'buy',

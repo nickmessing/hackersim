@@ -17,11 +17,20 @@ import {
   resume,
   setSpeed,
 } from '@/engine'
+import { isUnlocked } from '@/engine'
+import type { AppId } from '@/ui/apps'
 import { useGame } from '@/ui/game'
 import { openApp } from '@/ui/wm'
 import { ACTIVITY_GLYPHS, activityLabel } from './describe'
 
 const state = useGame()
+
+// Gradual discovery: tray segments appear with the program they belong to, and clicking one never
+// reveals a program early.
+const has = (app: AppId): boolean => isUnlocked(state, app)
+function openIf(app: AppId): void {
+  if (has(app)) openApp(app)
+}
 
 const SPEEDS = [
   { speed: 1, label: '1×', name: 'Normal speed', key: '1' },
@@ -151,27 +160,27 @@ const confinement = computed(() => {
 
     <span class="sep" aria-hidden="true"></span>
 
-    <button type="button" class="seg activity" :title="`Now: ${activityLabel(activity)}`" @click="openApp('schedule')">
+    <button v-if="has('schedule')" type="button" class="seg activity" :title="`Now: ${activityLabel(activity)}`" @click="openApp('schedule')">
       <span class="emo" aria-hidden="true">{{ ACTIVITY_GLYPHS[activity] }}</span>
       <span class="act-label">{{ activityLabel(activity) }}</span>
     </button>
 
-    <button type="button" class="seg vitals" :title="vitalsTitle" aria-label="Vitals" @click="openApp('life')">
+    <button v-if="has('schedule')" type="button" class="seg vitals" :title="vitalsTitle" aria-label="Vitals" @click="openIf('life')">
       <span v-for="v in vitals" :key="v.id" class="vital" :class="{ warn: v.warn }" :title="`${v.label} ${Math.round(v.value)}/100`">
         <span class="vbar"><span class="vfill" :style="{ height: `${Math.max(4, Math.min(100, v.value))}%`, background: v.color }"></span></span>
         <span class="vlabel">{{ v.short }}</span>
       </span>
     </button>
 
-    <button type="button" class="seg heat" :class="heatLevel.cls" :title="heatTitle" @click="openApp('ops')">
+    <button v-if="has('ops')" type="button" class="seg heat" :class="heatLevel.cls" :title="heatTitle" @click="openApp('ops')">
       <span class="emo" aria-hidden="true">♨</span>
       <span class="heat-bar"><span class="heat-fill" :style="{ width: `${Math.min(100, heat)}%` }"></span></span>
       <span class="heat-num">{{ heat }}</span>
     </button>
 
-    <button type="button" class="seg cash" :class="{ debt: state.stats.money < 0 }" :title="moneyTitle" @click="openApp('life')">{{ cash }}</button>
+    <button v-if="has('jobs') || has('life')" type="button" class="seg cash" :class="{ debt: state.stats.money < 0 }" :title="moneyTitle" @click="openIf('life')">{{ cash }}</button>
 
-    <button type="button" class="seg clock" :title="clockTitle" @click="openApp('schedule')">
+    <button type="button" class="seg clock" :title="clockTitle" @click="openIf('schedule')">
       <span class="time">{{ clock }}</span>
       <span class="date">{{ shortDate }}</span>
     </button>

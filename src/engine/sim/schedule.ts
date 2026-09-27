@@ -39,6 +39,7 @@ export function setSlot(state: GameState, hour: number, activity: PaintableActiv
   const cur = state.schedule[hour]
   if (cur === undefined || cur === 'work' || cur === 'class') return false
   state.schedule[hour] = activity
+  state.flags['sys.schedule_edited'] = true
   return true
 }
 
@@ -120,6 +121,7 @@ export function applyPreset(state: GameState, preset: string): void {
     const cur = state.schedule[h]
     if (cur !== 'work' && cur !== 'class') free.push(h)
   }
+  state.flags['sys.schedule_edited'] = true
   const plan = p.build(free)
   for (const [h, act] of Object.entries(plan)) state.schedule[Number(h)] = act
 }

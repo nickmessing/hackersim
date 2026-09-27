@@ -117,3 +117,5 @@ export {
   CHAIN_BY_TIER,
 } from './sim/missiongen'
 export type { GenOptions } from './sim/missiongen'
+export { FEATURES, isUnlocked, unlock, unlockAll, featureLabel } from './unlocks'
+export type { Feature } from './unlocks'

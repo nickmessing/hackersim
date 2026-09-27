@@ -24,13 +24,14 @@ const ispWelcome: SceneDef = {
       text: [
         'Dear Valued Subscriber,',
         'Congratulations, and welcome to the NorthLink family! Your 33.6k dial-up account is now ACTIVE. Your new email address is printed on the enclosed card. Please keep it somewhere safe and do not share it with strangers (or your little sister).',
-        'A few tips to get the most from your Information Superhighway experience:',
-        '• Your DESKTOP is your headquarters. The Mail icon holds this letter and everything after it. BuddyPager is for chatting with friends in real time. The Loft BBS icon opens the message boards.',
-        '• The DAILY PLANNER lets you decide how you spend each hour — sleeping, studying, working, or just relaxing. Fill it in, then press PLAY and watch the day go by.',
-        '• The CAREER CENTER and e-SHOP are where a young person turns talent into dollars, and dollars into a faster modem. In that order, we hope.',
+        'Your desktop will fill up as you go: new programs appear the first time you need them. New mail always lands right here, in the Mail window.',
         'Remember: while you are online, your household telephone line is IN USE. We are legally required to remind you that Mother may need the phone.',
         'Yours in connectivity,\nThe NorthLink Member Services Team',
         '(This mailbox is not monitored. For support, dial 1-800-NORTHLK and enjoy our music.)',
+      ],
+      choices: [
+        { text: 'Click "Got it!" like a Valued Subscriber.', effects: [{ flag: 'act0.mail_read' }] },
+        { text: 'Mark it as read and close it.', effects: [{ flag: 'act0.mail_read' }] },
       ],
     },
   },
@@ -282,18 +283,17 @@ const quest: QuestDef = {
   act: 1,
   priority: 100,
   giver: 'jax',
-  autoStart: inAct1,
+  // Act I begins once Act 0 (the guided introduction) is done.
+  autoStart: { all: [inAct1, { flag: 'act0.done' }] },
   rewards: 'The basics — and a paycheck to chase',
   summary:
     "September 2001. Your beige box hums, the modem sings, and Mom wants the phone. Learn the desktop — mail, messenger, the board, the planner — and find your feet before you go looking for your first dollar.",
   start: 'intro',
   stages: {
     intro: {
-      text: 'You just got online. There’s mail from the ISP and a page from Jax blinking on the taskbar. Read what Jax sent you.',
-      onEnter: [
-        { scene: 'a1_isp_welcome' },
-        { scene: 'a1_jax_welcome', delayHours: 1 },
-      ],
+      text: 'Your first week is behind you, and a page from Jax is blinking in the corner. Read what Jax sent you.',
+      // The ISP welcome mail belongs to Act 0 (src/content/act0); Act I opens with Jax's page.
+      onEnter: [{ scene: 'a1_jax_welcome', delayHours: 1 }],
       objectives: [
         {
           id: 'read_jax',

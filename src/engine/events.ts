@@ -18,6 +18,7 @@ import { applyEffects } from './effects'
 import { C } from './registry'
 import { rand, weighted } from './rng'
 import { deliverScene } from './story'
+import { isUnlocked } from './unlocks'
 import type { ComplicationSource, EventDef, GameState } from './types'
 
 function available(state: GameState, e: EventDef): boolean {
@@ -56,6 +57,8 @@ export function directorChance(state: GameState): number {
 
 /** Once per weekly turn (start of turn). */
 export function directorTick(state: GameState): void {
+  // Act 0 is a quiet, guided introduction: random events start once the Journal is revealed.
+  if (!isUnlocked(state, 'journal')) return
   // A story scene last turn counts as "something happened".
   const busy = state.events.lastSceneDay >= state.time.day - 7 && state.time.day > 0
   if (rand(state) >= directorChance(state)) {

@@ -6,6 +6,7 @@ import { C } from './registry'
 import { d20, rand, weighted } from './rng'
 import { log, notify, renderLine } from './text'
 import { pause, touchNpc } from './time'
+import { unlock } from './unlocks'
 import type { Choice, GameState, RollRecord, SceneDef, SceneNode, SkillCheck, SkillId, ThreadState } from './types'
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -102,6 +103,9 @@ export function deliverScene(state: GameState, id: string, delayHours?: number):
   state.threads.push(thread)
   state.seenScenes[id] = true
   state.events.lastSceneDay = state.time.day
+  if (scene.channel === 'mail') unlock(state, 'mail')
+  else if (scene.channel === 'chat') unlock(state, 'pager')
+  else if (scene.channel === 'forum') unlock(state, 'forum')
   enterNode(state, thread, scene.start)
   const from = scene.from ? (C.npcs.get(scene.from)?.name ?? scene.from) : undefined
   switch (scene.channel) {
@@ -305,6 +309,7 @@ export function publishNews(state: GameState, id: string): void {
   }
   if (state.news.some(n => n.id === id)) return
   state.news.push({ id, day: state.time.day, read: false })
+  unlock(state, 'news')
   applyEffects(state, def.effects)
   if (!def.ambient) notify(state, `📰 ${def.headline}`, 'story')
   else log(state, `📰 ${def.headline}`, 'info')
@@ -325,6 +330,7 @@ export function postForum(state: GameState, id: string): void {
     return
   }
   if (state.forum.some(f => f.id === id)) return
+  unlock(state, 'forum', true)
   state.forum.push({ id, day: state.time.day, read: false })
 }
 

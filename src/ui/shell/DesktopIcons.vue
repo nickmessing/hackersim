@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+import { isUnlocked } from '@/engine'
 import { APP_IDS, APPS, type AppId } from '@/ui/apps'
+import { useGame } from '@/ui/game'
 import { openApp } from '@/ui/wm'
 import AppIcon from './AppIcon.vue'
 import { shellUi } from './nav'
@@ -7,7 +10,10 @@ import type { UnreadMap } from './unread'
 
 defineProps<{ unread: UnreadMap }>()
 
-const icons = APP_IDS.filter(id => APPS[id].desktop).map(id => APPS[id])
+const state = useGame()
+/** Only programs the player has discovered (Act 0 gradual discovery). */
+const icons = computed(() => APP_IDS.filter(id => APPS[id].desktop && isUnlocked(state, id)).map(id => APPS[id]))
+const isNew = (id: AppId): boolean => state.flags[`ui.new.${id}`] === true
 
 function select(id: AppId): void {
   shellUi.selectedIcon = id
@@ -42,14 +48,51 @@ function deselect(): void {
     >
       <span class="icon-art">
         <AppIcon :app="app.id" :size="34" />
+        <span v-if="isNew(app.id)" class="new-pill" aria-label="new program">NEW</span>
         <span v-if="(unread[app.id] ?? 0) > 0" class="badge" :aria-label="`${unread[app.id]} new`">{{ (unread[app.id] ?? 0) > 99 ? '99+' : unread[app.id] }}</span>
       </span>
       <span class="icon-label">{{ app.label }}</span>
     </button>
+    <p v-if="icons.length === 0" class="empty-hint">
+      Your desktop is empty for now.<br />Programs appear the first time you need them.
+    </p>
   </div>
 </template>
 
 <style scoped>
+.new-pill {
+  position: absolute;
+  left: -6px;
+  top: -4px;
+  padding: 0 4px;
+  border-radius: 6px;
+  background: #ffd23c;
+  color: #3a2a00;
+  font-size: 9px;
+  font-weight: bold;
+  line-height: 14px;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 40%);
+  animation: new-pulse 1.2s ease-in-out infinite;
+}
+@keyframes new-pulse {
+  50% {
+    transform: scale(1.12);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .new-pill {
+    animation: none;
+  }
+}
+.empty-hint {
+  grid-row: 1 / span 3;
+  width: 240px;
+  margin: 24px 0 0 12px;
+  color: var(--desktop-fg);
+  opacity: 0.75;
+  text-shadow: 0 1px 2px rgb(0 0 0 / 60%);
+  line-height: 1.5;
+}
 .icons {
   position: absolute;
   inset: 6px auto 6px 6px;

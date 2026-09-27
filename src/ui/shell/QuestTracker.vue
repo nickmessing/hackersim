@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import { C, daysLeft, numRef, objectiveDone, renderLine, type QuestKind } from '@/engine'
+import { C, daysLeft, isUnlocked, numRef, objectiveDone, renderLine, type QuestKind } from '@/engine'
 import ProgressBar from '@/ui/components/ProgressBar.vue'
 import { useGame } from '@/ui/game'
 import { openApp } from '@/ui/wm'
@@ -96,6 +96,8 @@ watch(
 )
 
 function openJournal(): void {
+  // During Act 0 the tracker is the guide; the Journal itself appears when the story starts.
+  if (!isUnlocked(state, 'journal')) return
   shellUi.noActive = false
   openApp('journal', questId.value ? { quest: questId.value } : {})
 }

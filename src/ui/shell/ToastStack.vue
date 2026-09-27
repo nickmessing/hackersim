@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted } from 'vue'
-import { onToast } from '@/engine'
+import { isUnlocked, onToast } from '@/engine'
 import { useGame } from '@/ui/game'
 import { openApp } from '@/ui/wm'
 import { shellUi } from './nav'
@@ -24,7 +24,8 @@ onBeforeUnmount(() => {
 
 function activate(t: Toast): void {
   dismissToast(t.id)
-  if (t.target) {
+  // Clicking a toast never reveals a program the player hasn't discovered yet.
+  if (t.target && isUnlocked(state, t.target.app)) {
     shellUi.noActive = false
     openApp(t.target.app, t.target.props)
   }

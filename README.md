@@ -15,6 +15,9 @@ is make-believe: skill checks, dice and an invented terminal.
 
 ## Features
 
+- **Learn by discovery** — a new game starts on an empty desktop. Act 0 walks you through your
+  first week, and every program appears the first time you need it: Mail with your first letter,
+  BuddyPager when someone pages you, the Forum when something is posted, and so on.
 - **Retro desktop** — a Windows-XP-era fake OS with draggable windows, a taskbar, Start menu, tray
   clock and toasts. Mail, a messenger (BuddyPager), an underground BBS, a news portal, an e-shop,
   a quest journal, a career center, a daily planner and a terminal.

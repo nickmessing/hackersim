@@ -8,6 +8,7 @@
 import type { Registry } from '../src/engine/registry'
 import type { Cond, Effect, NumRef, SceneDef, Text } from '../src/engine/types'
 import { SKILLS } from '../src/engine/types'
+import { isFeature } from '../src/engine/unlocks'
 
 export interface Problem {
   file: string
@@ -155,6 +156,7 @@ export function validateContent(reg: Registry): Problem[] {
     if ('background' in c) { need(reg.backgrounds, 'background', c.background, file, where); return; }
     if ('trait' in c) { need(reg.traits, 'trait', c.trait, file, where); return; }
     if ('ending' in c) { need(reg.endings, 'ending', c.ending, file, where); return; }
+    if ('unlocked' in c) { if (!isFeature(c.unlocked)) err(file, where, `unknown feature "${c.unlocked}"`); return; }
     if ('eventFired' in c) { need(reg.events, 'event', c.eventFired, file, where); return; }
     if ('obligation' in c) { refs.obligationsRead.set(c.obligation, `${file} ${where}`); return; }
     const known = ['always', 'never', 'stat', 'age', 'day', 'hour', 'jobTrack', 'jailed', 'chance']
@@ -285,6 +287,10 @@ export function validateContent(reg: Registry): Problem[] {
     if ('removeObligation' in e) return
     if ('complication' in e) {
       refs.complicationSources.add(e.complication)
+      return
+    }
+    if ('unlock' in e) {
+      for (const id of typeof e.unlock === 'string' ? [e.unlock] : e.unlock) if (!isFeature(id)) err(file, where, `unknown feature "${id}"`)
       return
     }
     if ('event' in e) {

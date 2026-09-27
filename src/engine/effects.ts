@@ -15,6 +15,7 @@ import { questEffect } from './quests'
 import { moveHousing, setLifestyle } from './sim/life'
 import { pause } from './time'
 import { fireEvent, triggerComplication } from './events'
+import { CONTACTS_UNLOCK_MET, unlock } from './unlocks'
 
 const BOUNDED = new Set(['health', 'energy', 'stress', 'mood', 'heat', 'cred'])
 
@@ -76,7 +77,10 @@ export function applyEffect(state: GameState, e: Effect): void {
   }
   if ('npc' in e) {
     const s = npcState(state, e.npc)
-    if (e.met !== undefined) s.met = e.met
+    if (e.met !== undefined) {
+      s.met = e.met
+      if (e.met && Object.values(state.npcs).filter(n => n.met).length >= CONTACTS_UNLOCK_MET) unlock(state, 'contacts')
+    }
     if (e.affinity !== undefined) s.affinity = clamp(s.affinity + e.affinity, -100, 100)
     if (e.fate !== undefined) s.fate = e.fate
     if (e.romance !== undefined) s.romance = e.romance
@@ -227,6 +231,10 @@ export function applyEffect(state: GameState, e: Effect): void {
   }
   if ('event' in e) {
     fireEvent(state, e.event)
+    return
+  }
+  if ('unlock' in e) {
+    unlock(state, e.unlock)
     return
   }
   // 'pause'

@@ -3,7 +3,9 @@
  * except the open-window layout which is remembered in localStorage).
  */
 import { reactive } from 'vue'
+import { isUnlocked, unlock } from '@/engine/unlocks'
 import { APPS, type AppId } from './apps'
+import { hasGame, useGame } from './game'
 
 export interface WinState {
   app: AppId
@@ -33,8 +35,18 @@ export function windowOf(app: AppId): WinState | undefined {
   return wm.windows.find(w => w.app === app)
 }
 
+/** Opening a program reveals it (e.g. the Terminal the first time an op launches) and clears NEW. */
+function markOpened(app: AppId): void {
+  if (!hasGame()) return
+  const state = useGame()
+  unlock(state, app)
+  // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+  delete state.flags[`ui.new.${app}`]
+}
+
 /** Open (or focus) an app. Passing props updates the props of an already-open window. */
 export function openApp(app: AppId, props: Record<string, unknown> = {}): void {
+  markOpened(app)
   const existing = windowOf(app)
   if (existing) {
     existing.minimized = false
@@ -116,8 +128,9 @@ export function restoreLayout(): void {
     const raw = localStorage.getItem(LAYOUT_KEY)
     if (!raw) return
     const data = JSON.parse(raw) as { app: AppId; x: number; y: number; w: number; h: number; maximized: boolean }[]
+    const unlocked = (app: AppId): boolean => !hasGame() || isUnlocked(useGame(), app)
     wm.windows = data
-      .filter(d => d.app in APPS)
+      .filter(d => d.app in APPS && unlocked(d.app))
       .map(d => ({ ...d, z: ++wm.zTop, minimized: false, props: {} }))
   } catch {
     // ignore

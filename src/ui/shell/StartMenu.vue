@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { C, formatShortDate } from '@/engine'
+import { isUnlocked } from '@/engine'
 import { APP_IDS, APPS, type AppId } from '@/ui/apps'
 import { quitToTitle, saveNow, useGame } from '@/ui/game'
 import { exitApp, isDesktopApp, toggleFullscreen } from '@/ui/platform'
@@ -32,7 +33,7 @@ const BLURBS: Record<AppId, string> = {
   system: 'Saves, settings, statistics',
 }
 
-const programs = APP_IDS.filter(id => id !== 'system').map(id => APPS[id])
+const programs = computed(() => APP_IDS.filter(id => id !== 'system' && isUnlocked(state, id)).map(id => APPS[id]))
 
 const initials = computed(() => {
   const h = state.player.handle.replace(/[^A-Za-z0-9]/g, '')

@@ -184,6 +184,8 @@ export type Cond =
   | { obligation: string }
   /** This event (or complication) has fired at least once. */
   | { eventFired: string }
+  /** A desktop program has been revealed (see src/engine/unlocks.ts). */
+  | { unlocked: string }
 
 // ────────────────────────────────────────────────────────────────────────────
 // Modifiers (item / housing / buff / trait bonuses)
@@ -295,6 +297,8 @@ export type Effect =
   | { complication: ComplicationSource; tier?: number }
   /** Fire a specific event from the event pool now (ignores its `when`, respects nothing else). */
   | { event: string }
+  /** Reveal desktop programs (Act 0 gradual discovery). Ids: see FEATURES in src/engine/unlocks.ts. */
+  | { unlock: string | string[] }
 
 export type LogKind = 'info' | 'good' | 'bad' | 'story' | 'money' | 'skill' | 'heat' | 'quest'
 
@@ -1102,6 +1106,8 @@ export interface GameState {
   log: LogEntry[]
   settings: Settings
   /** Aggregates for the stats screen. */
+  /** Desktop programs revealed so far (gradual discovery; see src/engine/unlocks.ts). */
+  unlocked: string[]
   /** Recurring costs from fines, lawsuits, loans, medical bills (see `obligation` effect). */
   obligations: { id: string; label: string; perDay: number; untilDay: number | null }[]
   /** Event director bookkeeping. */

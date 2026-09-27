@@ -1,10 +1,12 @@
 import { beforeAll, describe, expect, it } from 'vitest'
-import { C, applyEffects, balance, createState, directorTick, evalCond, simulateHours, type GameState } from '../src/engine'
+import { C, applyEffects, balance, createState, directorTick, evalCond, simulateHours, unlockAll, type GameState } from '../src/engine'
 import { expenseBreakdown } from '../src/engine/sim/life'
 
 function fresh(): GameState {
   const s = createState({ name: 'T', handle: 't', background: '', traits: [], seed: 11 })
   s.settings.autoPauseDialogs = false
+  // The director stays quiet during Act 0 (until the Journal is revealed).
+  unlockAll(s)
   return s
 }
 

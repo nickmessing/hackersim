@@ -1,5 +1,6 @@
 import { SKILL_LABELS, SKILL_MAX, xpToNext } from '../balance'
 import { log } from '../text'
+import { unlock } from '../unlocks'
 import type { GameState, SkillId } from '../types'
 
 export function addSkillXp(state: GameState, skill: SkillId, amount: number): void {
@@ -11,6 +12,7 @@ export function addSkillXp(state: GameState, skill: SkillId, amount: number): vo
   while (s.xp >= need && s.level < SKILL_MAX) {
     s.xp -= need
     s.level += 1
+    unlock(state, 'skills')
     log(state, `${SKILL_LABELS[skill]} reached level ${s.level}`, 'skill', s.level % 5 === 0)
     need = xpToNext(s.level)
   }

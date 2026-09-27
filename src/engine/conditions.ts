@@ -3,6 +3,7 @@ import { ageOn } from './calendar'
 import { money } from './format'
 import { C } from './registry'
 import { rand } from './rng'
+import { isUnlocked } from './unlocks'
 import type { Cond, GameState, NpcState, NumRef, StatId } from './types'
 
 /** Read-only default for NPCs that have no state yet (never inserts into state). */
@@ -134,6 +135,7 @@ export function evalCond(state: GameState, cond: Cond | undefined): boolean {
   if ('jailed' in cond) return (state.jail !== null) === cond.jailed
   if ('obligation' in cond) return state.obligations.some(o => o.id === cond.obligation)
   if ('eventFired' in cond) return (state.events.fired[cond.eventFired]?.count ?? 0) > 0
+  if ('unlocked' in cond) return isUnlocked(state, cond.unlocked)
   // 'chance'
   return rand(state) < cond.chance
 }

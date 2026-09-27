@@ -1,5 +1,6 @@
 import { HACK_DEADLINE_DAYS, PREP_HOURS_BY_TIER } from './balance'
 import { C } from './registry'
+import { FEATURES } from './unlocks'
 import { generateMission, tierFromDc } from './sim/missiongen'
 import type { ActivityId, ContractInstance, GameState, NpcState, OpSpec, Settings, SkillId } from './types'
 import { SKILLS } from './types'
@@ -51,7 +52,7 @@ export function createState(opts: NewGameOptions): GameState {
     createdAt: Date.now(),
     savedAt: Date.now(),
     player: { name: opts.name, handle: opts.handle, background: opts.background, traits: [...opts.traits] },
-    time: { day: 0, hour: 8, frac: 0, speed: 1, lastSpeed: 1, totalHours: 0 },
+    time: { day: 0, hour: 8, frac: 0, speed: 0, lastSpeed: 1, totalHours: 0 },
     stats: { money: 150, health: 85, energy: 80, stress: 15, mood: 60, heat: 0, cred: 0 },
     skills,
     schedule: defaultSchedule(),
@@ -86,6 +87,7 @@ export function createState(opts: NewGameOptions): GameState {
     endingsSeen: [],
     log: [],
     settings: { ...DEFAULT_SETTINGS },
+    unlocked: [],
     obligations: [],
     events: { fired: {}, quietTurns: 0, recent: [], lastSceneDay: 0 },
     lastReport: null,
@@ -190,6 +192,8 @@ export function hydrate(raw: Partial<GameState>): GameState {
   merged.contracts = { ...base.contracts, ...raw.contracts }
   merged.events = { ...base.events, ...raw.events }
   merged.obligations = raw.obligations ?? []
+  // Saves from before gradual discovery: everything is already on the desktop.
+  merged.unlocked = raw.unlocked ?? [...FEATURES]
   // Contracts saved before the ops redesign have no prep fields.
   for (const c of [...merged.contracts.board, ...merged.contracts.active]) {
     const legacy = c as Partial<typeof c>
