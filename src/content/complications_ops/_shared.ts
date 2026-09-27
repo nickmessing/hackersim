@@ -8,7 +8,7 @@
  *               fail branches across the game, including escalations inside THIS pack; the engine
  *               never picks 'legal' on its own)
  *
- * Files: hack_traces.ts (hack T1-3), gig.ts (gig T1-5), legal.ts (legal T1-5; its arraignment,
+ * Files: hack_traces.ts (hack T1-3), gig.ts + gig_fallout.ts (gig T1-5), legal.ts (legal T1-5; its arraignment,
  * civil suit and federal letter also answer traced hack ops at T2-5), scars.ts (every TraitDef).
  * Each source keeps at least one repeatable entry per tier so its
  * pool never empties back to the generic 'any' pool.
