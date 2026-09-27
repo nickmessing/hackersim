@@ -1,7 +1,22 @@
 import type { GameState } from './types'
 
-/** Seeded PRNG (mulberry32). State lives in `state.rng` so saves are deterministic. */
+/**
+ * Randomness for every roll in the game (checks, contracts, events, raids...).
+ *
+ * The game uses REAL randomness, so reloading a save and trying again gives a fresh roll: save
+ * scumming is a legitimate way to play for players who want perfect outcomes.
+ *
+ * Tests and the balance bots need reproducible runs, so they switch to the seeded generator
+ * (mulberry32, state kept in `state.rng`) via `setSeededRandom(true)` — see tests/setup.ts.
+ */
+let seeded = false
+
+export function setSeededRandom(on: boolean): void {
+  seeded = on
+}
+
 export function rand(state: GameState): number {
+  if (!seeded) return Math.random()
   let t = (state.rng = (state.rng + 0x6d2b79f5) | 0)
   t = Math.imul(t ^ (t >>> 15), t | 1)
   t ^= t + Math.imul(t ^ (t >>> 7), t | 61)
