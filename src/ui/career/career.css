@@ -1,0 +1,36 @@
+/*
+ * Career & growth design tokens (planner activity colors, vitals colors). Imported by the
+ * career/life apps; everything else uses the global theme tokens.
+ * Activity palette: each color is paired with a text label or glyph wherever it is shown
+ * (color is never the only identity channel).
+ */
+:root {
+  --act-sleep: #3d4fb0;
+  --act-sleep-ink: #ffffff;
+  --act-work: #8f6a3a;
+  --act-work-ink: #ffffff;
+  --act-class: #9455c9;
+  --act-class-ink: #ffffff;
+  --act-study: #2a8fd8;
+  --act-study-ink: #ffffff;
+  --act-hack: #1f9d55;
+  --act-hack-ink: #ffffff;
+  --act-freelance: #d9a400;
+  --act-freelance-ink: #1b1400;
+  --act-exercise: #e0602b;
+  --act-exercise-ink: #ffffff;
+  --act-social: #d63f8c;
+  --act-social-ink: #ffffff;
+  --act-relax: #35b5a8;
+  --act-relax-ink: #062623;
+
+  --vital-health: #d0342c;
+  --vital-energy: #c98f00;
+  --vital-stress: #8e44ad;
+  --vital-mood: #2a78d6;
+  --vital-heat: #e0602b;
+  --vital-cred: #1f9d55;
+  --vital-eff: #2fb12f;
+
+  --career-hatch: repeating-linear-gradient(135deg, rgb(255 255 255 / 22%) 0 4px, transparent 4px 8px);
+}

@@ -1,0 +1,99 @@
+/*
+ * HackerSim retro desktop theme — design tokens. Every component uses these variables;
+ * never hard-code colors. Two skins: "luna" (XP-like, default) and "classic" (Win98-like)
+ * selected by [data-skin] on <html>.
+ */
+:root {
+  --font-ui: Tahoma, Verdana, 'Segoe UI', sans-serif;
+  --font-mono: 'Lucida Console', 'Courier New', monospace;
+  --font-size: 12px;
+
+  --desktop-bg: #3a6ea5;
+  --desktop-fg: #ffffff;
+
+  --win-bg: #ece9d8;
+  --win-fg: #000000;
+  --win-border: #0054e3;
+  --win-title-a: #0a246a;
+  --win-title-b: #3a6ea5;
+  --win-title-fg: #ffffff;
+  --win-title-inactive-a: #7a96df;
+  --win-title-inactive-b: #a6caf0;
+  --win-shadow: 2px 3px 10px rgb(0 0 0 / 35%);
+
+  --panel-bg: #ffffff;
+  --panel-border: #7f9db9;
+  --panel-alt: #f4f3ee;
+  --sel-bg: #316ac5;
+  --sel-fg: #ffffff;
+  --muted: #6d6d6d;
+
+  --btn-bg: #f5f4ea;
+  --btn-border: #003c74;
+  --btn-hover: #fdfbf3;
+  --btn-disabled-fg: #a0a0a0;
+
+  --taskbar-a: #245edb;
+  --taskbar-b: #1941a5;
+  --taskbar-fg: #ffffff;
+  --start-a: #3c9a3c;
+  --start-b: #2f7d2f;
+
+  --good: #1a7f1a;
+  --bad: #b3261e;
+  --warn: #b36b00;
+  --info: #1f4e9c;
+  --story: #6b2fa3;
+  --money: #0d6b3d;
+  --heat: #c23b00;
+  --skill: #0b6e8a;
+
+  --bar-bg: #ffffff;
+  --bar-border: #686868;
+  --bar-fill: #2fb12f;
+
+  --terminal-bg: #050805;
+  --terminal-fg: #33ff66;
+  --terminal-dim: #1d8a3a;
+  --terminal-warn: #ffcc33;
+  --terminal-err: #ff5544;
+
+  --radius: 3px;
+}
+
+:root[data-skin='classic'] {
+  --font-ui: 'MS Sans Serif', 'Microsoft Sans Serif', Arial, sans-serif;
+  --desktop-bg: #008080;
+  --win-bg: #c0c0c0;
+  --win-border: #c0c0c0;
+  --win-title-a: #000080;
+  --win-title-b: #1084d0;
+  --win-title-inactive-a: #808080;
+  --win-title-inactive-b: #b5b5b5;
+  --panel-border: #808080;
+  --btn-bg: #c0c0c0;
+  --btn-border: #000000;
+  --btn-hover: #d4d0c8;
+  --taskbar-a: #c0c0c0;
+  --taskbar-b: #c0c0c0;
+  --taskbar-fg: #000000;
+  --start-a: #c0c0c0;
+  --start-b: #c0c0c0;
+  --radius: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  font-family: var(--font-ui);
+  font-size: var(--font-size);
+  color: var(--win-fg);
+  background: var(--desktop-bg);
+}

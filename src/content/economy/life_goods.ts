@@ -1,0 +1,227 @@
+import { dayOf } from '@/engine/calendar'
+import { defineContent } from '@/engine/registry'
+
+/**
+ * ECON — Furniture, gadgets and vehicles (the "Life" shop). Quality-of-life items: comfort,
+ * energy, mood, stress relief, and small efficiency edges. Some carry a daily upkeep and some
+ * gate in by era. Everything is invented; nothing has a real brand.
+ */
+export default defineContent({
+  items: [
+    // ── Furniture ───────────────────────────────────────────────────────────
+    {
+      id: 'furn_chair',
+      name: 'Ergonomic Chair',
+      category: 'furniture',
+      shop: 'life',
+      price: 180,
+      desc: 'Mesh back, lumbar support, and a dozen levers you will adjust exactly once. Your spine writes you a thank-you note.',
+      mods: [{ key: 'energy.drain', mult: 0.93 }],
+    },
+    {
+      id: 'furn_desk',
+      name: 'L-Shaped Desk',
+      category: 'furniture',
+      shop: 'life',
+      price: 120,
+      desc: 'Enough surface for the tower, two monitors you don\'t have yet, and a truly heroic amount of clutter. A workspace with ambitions.',
+      mods: [{ key: 'efficiency', mult: 1.03 }],
+    },
+    {
+      id: 'furn_fridge',
+      name: 'Mini-Fridge',
+      category: 'furniture',
+      shop: 'life',
+      price: 90,
+      desc: "Cold drinks within arm's reach means you never have to stand up and remember the outside world exists. Hums a little. You stop hearing it by Tuesday.",
+      mods: [
+        { key: 'energy.drain', mult: 0.97 },
+        { key: 'mood.daily', add: 0.2 },
+      ],
+    },
+    {
+      id: 'furn_lavalamp',
+      name: 'Lava Lamp',
+      category: 'furniture',
+      shop: 'life',
+      price: 25,
+      desc: 'Does nothing, means everything. Watching the blob rise and fall is the closest thing to meditation you allow yourself.',
+      mods: [
+        { key: 'stress.relief', mult: 1.08 },
+        { key: 'mood.daily', add: 0.3 },
+      ],
+    },
+    {
+      id: 'furn_bookshelf',
+      name: 'Bookshelf',
+      category: 'furniture',
+      shop: 'life',
+      price: 60,
+      desc: 'Somewhere to line up the manuals so you can find them, and so visitors can be quietly intimidated. Doubles as a place for the plant you will kill.',
+      mods: [{ key: 'xp.all', mult: 1.05 }],
+    },
+    {
+      id: 'furn_curtains',
+      name: 'Blackout Curtains',
+      category: 'furniture',
+      shop: 'life',
+      price: 40,
+      desc: 'Turn noon into midnight, which is when your body has decided it prefers to sleep anyway. The neighbors assume the worst.',
+      mods: [{ key: 'energy.regen', mult: 1.06 }],
+    },
+    {
+      id: 'furn_heater',
+      name: 'Space Heater',
+      category: 'furniture',
+      shop: 'life',
+      price: 35,
+      upkeepPerDay: 1,
+      desc: 'The Flats are damp and the radiators are a rumor. This glowing orange box is the difference between typing and shivering.',
+      mods: [{ key: 'stress.relief', mult: 1.05 }],
+    },
+    {
+      id: 'furn_speakers',
+      name: '2.1 Speaker Set',
+      category: 'furniture',
+      shop: 'life',
+      price: 110,
+      desc: 'A subwoofer under the desk that rattles the CDs on the shelf. The right track at 2 a.m. makes a bad night survivable.',
+      mods: [
+        { key: 'mood.daily', add: 0.4 },
+        { key: 'stress.relief', mult: 1.06 },
+      ],
+    },
+
+    // ── Gadgets ─────────────────────────────────────────────────────────────
+    {
+      id: 'gad_coffee',
+      name: 'Coffee Machine',
+      category: 'gadget',
+      shop: 'life',
+      price: 70,
+      upkeepPerDay: 1,
+      desc: 'A drip machine that gurgles like a dying animal and produces a substance that is legally coffee. It is the load-bearing wall of your whole operation.',
+      mods: [{ key: 'efficiency', mult: 1.04 }],
+    },
+    {
+      id: 'gad_pager',
+      name: 'Numeric Pager',
+      category: 'gadget',
+      shop: 'life',
+      price: 45,
+      upkeepPerDay: 1,
+      desc: 'Clips to your belt and buzzes with a phone number and, if you and your friends worked out a code, a whole secret sentence. 143 means I love you. 07734 is "hello" upside down.',
+      mods: [{ key: 'check.social', add: 1 }],
+    },
+    {
+      id: 'gad_cellphone',
+      name: 'Brick Cellphone',
+      category: 'gadget',
+      shop: 'life',
+      price: 200,
+      upkeepPerDay: 2,
+      available: { day: true, gte: dayOf(2002, 0, 1) },
+      desc: "Green screen, three-day battery, a game about a snake, and the strange new power to be reachable anywhere. You're not sure yet whether that's freedom or a leash.",
+      mods: [{ key: 'check.social', add: 1 }],
+    },
+    {
+      id: 'gad_pda',
+      name: 'PalmJot PDA',
+      category: 'gadget',
+      shop: 'life',
+      price: 150,
+      available: { day: true, gte: dayOf(2002, 0, 1) },
+      desc: 'Your whole calendar and contact list in your pocket, entered one letter at a time in a made-up alphabet you had to learn. You feel like a spy. You look like a nerd. Both are correct.',
+      mods: [{ key: 'efficiency', mult: 1.03 }],
+    },
+    {
+      id: 'gad_mp3',
+      name: 'MP3 Player',
+      category: 'gadget',
+      shop: 'life',
+      price: 250,
+      available: { day: true, gte: dayOf(2002, 0, 1) },
+      desc: 'A thousand songs in a box the size of a deck of cards. You spend more time curating playlists than listening to them, and that, too, is a kind of joy.',
+      mods: [
+        { key: 'mood.daily', add: 0.4 },
+        { key: 'stress.relief', mult: 1.05 },
+      ],
+    },
+    {
+      id: 'gad_camera',
+      name: 'Digital Camera',
+      category: 'gadget',
+      shop: 'life',
+      price: 180,
+      available: { day: true, gte: dayOf(2003, 0, 1) },
+      desc: 'Two megapixels, a screen the size of a stamp, and no more waiting a week to find out the photos were all of your thumb. Fills memory cards with LAN parties and Mom.',
+      mods: [{ key: 'mood.daily', add: 0.2 }],
+    },
+
+    // ── Membership / consumables (misc) ─────────────────────────────────────
+    {
+      id: 'gad_gym',
+      name: 'Gym Membership',
+      category: 'misc',
+      shop: 'life',
+      price: 60,
+      upkeepPerDay: 2,
+      desc: 'A monthly fee, a locker, and the reasonable-sounding lie that this time you\'ll go regularly. When you actually do, it works alarmingly well.',
+      mods: [
+        { key: 'xp.fitness', mult: 1.3 },
+        { key: 'health.daily', add: 0.2 },
+      ],
+    },
+    {
+      id: 'gad_energy_drinks',
+      name: 'Case of Energy Drinks',
+      category: 'misc',
+      shop: 'life',
+      price: 30,
+      upkeepPerDay: 1,
+      desc: 'A pallet of glowing cans that taste like liquefied gummy bears and regret. They work. They always work. That is exactly the problem.',
+      mods: [
+        { key: 'efficiency', mult: 1.03 },
+        { key: 'stress.gain', mult: 1.05 },
+      ],
+    },
+
+    // ── Vehicles ────────────────────────────────────────────────────────────
+    {
+      id: 'veh_bicycle',
+      name: 'Bicycle',
+      category: 'vehicle',
+      shop: 'life',
+      price: 120,
+      desc: "Ten speeds, one working brake, and a basket for carrying a tower across town. Gets you there and keeps your legs from forgetting they exist.",
+      mods: [
+        { key: 'energy.drain', mult: 0.97 },
+        { key: 'xp.fitness', mult: 1.05 },
+      ],
+    },
+    {
+      id: 'veh_car',
+      name: 'Used Hatchback',
+      category: 'vehicle',
+      shop: 'life',
+      price: 2500,
+      upkeepPerDay: 3,
+      desc: 'Two hundred thousand miles, a check-engine light that\'s more of a mood, and freedom. You can carry gear, carry friends, and leave a place fast if you have to.',
+      mods: [{ key: 'energy.drain', mult: 0.95 }],
+    },
+    {
+      id: 'veh_motorcycle',
+      name: 'Motorcycle',
+      category: 'vehicle',
+      shop: 'life',
+      price: 4000,
+      upkeepPerDay: 4,
+      available: { day: true, gte: dayOf(2003, 0, 1) },
+      desc: 'Loud, quick, and impractical for carrying a nineteen-inch monitor, which you will attempt exactly once. Splits traffic and clears your head at the same time.',
+      mods: [
+        { key: 'energy.drain', mult: 0.94 },
+        { key: 'mood.daily', add: 0.3 },
+      ],
+    },
+  ],
+})

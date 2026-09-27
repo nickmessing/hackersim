@@ -1,0 +1,257 @@
+/**
+ * PKG-18 — the top of the ladders: security, management, startups, and the jobs that come with a
+ * faction attached (the Cage, the Bureau, Aperture).
+ *
+ * Balance (CONTENT_GUIDE §6): security analyst $230 · consultant $340 · lead/manager $300–450 ·
+ * CTO/partner $600+. Faction jobs follow bible §3: Aperture Trusted (50) opens the Aperture
+ * fast-track; Bureau Trusted (50) opens the consultant stipend.
+ */
+import { dayOf } from '@/engine/calendar'
+import { defineContent } from '@/engine/registry'
+import type { JobDef } from '@/engine/types'
+import { apertureStanding, halcyonAlive, meridianOpen } from './_shared'
+
+const security: JobDef[] = [
+  {
+    id: 'job_meridian_secanalyst',
+    title: 'Information Security Analyst',
+    employer: 'Meridian Trust Bank',
+    track: 'security',
+    desc: 'Meridian finally has a security team: three people and a budget line. You read logs nobody else reads, write memos nobody else reads, and sit in on the vendor pitches where men in good suits promise to make the bank "unbreachable." You know better. You are paid, handsomely, to know better.',
+    pay: 230,
+    shiftStart: 9,
+    hours: 8,
+    skillXp: { intrusion: 3, opsec: 3, networking: 2 },
+    stressPerHour: 1.8,
+    energyPerHour: 3.5,
+    maxLevel: 25,
+    req: {
+      all: [
+        meridianOpen,
+        { skill: 'intrusion', gte: 40 },
+        { skill: 'opsec', gte: 30 },
+        { skill: 'networking', gte: 30 },
+        { flag: 'job.offer.meridian_secanalyst' },
+      ],
+    },
+    visible: { all: [meridianOpen, { skill: 'intrusion', gte: 30 }] },
+    perk: 'You see what the defenders see: hack rolls +1, and you heat up slower.',
+    mods: [
+      { key: 'hack.roll', add: 1 },
+      { key: 'hack.heat', mult: 0.92 },
+    ],
+  },
+  {
+    id: 'job_cage_consultant',
+    title: 'Civilian Technical Consultant',
+    employer: 'Port Lumen PD — Cyber Unit ("the Cage")',
+    track: 'security',
+    desc: 'Detective Calderon has a budget of nothing, a closet of seized hardware and a modem from 1997. She also has you, part-time, on a civilian contract, reading drives and explaining to a room of detectives what a chat log is. The coffee is a crime. The Loft will hear about this.',
+    pay: 150,
+    shiftStart: 13,
+    hours: 6,
+    skillXp: { systems: 3, intrusion: 2, opsec: 2, social: 1 },
+    stressPerHour: 1.4,
+    energyPerHour: 3.3,
+    maxLevel: 20,
+    req: { all: [{ npc: 'calderon', met: true }, { skill: 'intrusion', gte: 30 }, { stat: 'heat', lte: 30 }] },
+    visible: { npc: 'calderon', met: true },
+    perk: 'The cops know your face — in a good way. Heat cools faster.',
+    mods: [{ key: 'heat.decay', add: 0.4 }],
+  },
+  {
+    id: 'job_tidewater_consultant',
+    title: 'Security Consultant',
+    employer: 'Tidewater Assurance Group',
+    track: 'security',
+    desc: 'A boutique in Harbor Point with frosted glass doors and a client list it will not show you. Banks, insurers and a shipping line pay Tidewater to tell them how bad things really are, and Tidewater pays you to be the person in the room who says it out loud without flinching. By invitation only.',
+    pay: 340,
+    shiftStart: 10,
+    hours: 8,
+    skillXp: { intrusion: 3, opsec: 3, business: 3 },
+    stressPerHour: 1.9,
+    energyPerHour: 3.4,
+    maxLevel: 25,
+    req: {
+      all: [
+        { skill: 'intrusion', gte: 55 },
+        { skill: 'opsec', gte: 45 },
+        { skill: 'business', gte: 25 },
+        { flag: 'job.offer.tidewater' },
+      ],
+    },
+    visible: { skill: 'intrusion', gte: 45 },
+    perk: 'Consultant rates and a clean reputation: hack rolls +1, heat cools faster.',
+    mods: [
+      { key: 'hack.roll', add: 1 },
+      { key: 'heat.decay', add: 0.3 },
+    ],
+  },
+  {
+    id: 'job_bureau_consultant',
+    title: 'Contract Intelligence Analyst',
+    employer: 'Federal Cyber Task Force — Port Lumen Field Office',
+    track: 'security',
+    desc: 'A visitor badge that never quite becomes a real one, a desk in a windowless annex, and a stack of case files about people you might know. The stipend is generous. Agent Reyes signs your timesheets. SAC Marlow signs everything else.',
+    pay: 260,
+    shiftStart: 9,
+    hours: 8,
+    skillXp: { opsec: 3, networking: 2, intrusion: 2, social: 1 },
+    stressPerHour: 1.7,
+    energyPerHour: 3.4,
+    maxLevel: 25,
+    req: { all: [{ flag: 'fac.bureau.informant' }, { faction: 'fac.bureau', gte: 50 }, { skill: 'opsec', gte: 30 }] },
+    visible: { flag: 'fac.bureau.informant' },
+    perk: 'Federal cover: heat melts away — as long as you stay useful.',
+    mods: [{ key: 'heat.decay', add: 0.8 }],
+  },
+  {
+    id: 'job_aperture_analyst',
+    title: 'Special Accounts Analyst',
+    employer: 'Aperture Data Solutions',
+    track: 'security',
+    desc: 'The fast-track: an office on the Special Accounts floor, a view of the fountain, and "data hygiene" work that is exactly what you think it is, wearing a nicer shirt. Kroll takes you to lunch on your first day. Hollis takes notes on your first week. By invitation only.',
+    pay: 255,
+    shiftStart: 10,
+    hours: 8,
+    skillXp: { business: 3, intrusion: 2, cryptography: 2, social: 1 },
+    stressPerHour: 1.6,
+    energyPerHour: 3.3,
+    maxLevel: 25,
+    req: { all: [apertureStanding, { faction: 'fac.aperture', gte: 50 }, { flag: 'job.offer.aperture_analyst' }] },
+    visible: { all: [apertureStanding, { faction: 'fac.aperture', gte: 35 }] },
+    perk: 'Aperture\'s lawyers and Aperture\'s tools: rolls +2, hacking heat cut by a fifth.',
+    mods: [
+      { key: 'hack.roll', add: 2 },
+      { key: 'hack.heat', mult: 0.8 },
+    ],
+  },
+]
+
+const management: JobDef[] = [
+  {
+    id: 'job_halcyon_lead',
+    title: 'Engineering Lead',
+    employer: 'Halcyon Systems',
+    track: 'management',
+    desc: 'You have a team now, a budget, a seat at the Monday meeting and a calendar that is 70% other people\'s problems. Vale calls you "one of the grown-ups." Priya calls you "boss" and means it as a warning. The options are worth a house, on paper, on a good day.',
+    pay: 330,
+    shiftStart: 8,
+    hours: 10,
+    skillXp: { business: 4, social: 3, programming: 2 },
+    stressPerHour: 2.0,
+    energyPerHour: 3.6,
+    maxLevel: 25,
+    req: {
+      all: [
+        halcyonAlive,
+        { jobLevel: 'job_halcyon_senior', gte: 5 },
+        { skill: 'programming', gte: 55 },
+        { skill: 'business', gte: 30 },
+        { faction: 'fac.halcyon', gte: 60 },
+      ],
+    },
+    perk: 'Management: people listen when you talk (Social and Business checks +1).',
+    mods: [
+      { key: 'check.social', add: 1 },
+      { key: 'check.business', add: 1 },
+    ],
+  },
+  {
+    id: 'job_meridian_it_manager',
+    title: 'Director of Information Security',
+    employer: 'Meridian Trust Bank',
+    track: 'management',
+    desc: 'The corner office on the fourteenth floor, a title with "Director" in it, and a board of directors who want one sentence from you every quarter: "we are secure." Some quarters, you can even say it with a straight face.',
+    pay: 420,
+    shiftStart: 8,
+    hours: 9,
+    skillXp: { business: 4, opsec: 3, social: 2 },
+    stressPerHour: 2.1,
+    energyPerHour: 3.3,
+    maxLevel: 25,
+    req: {
+      all: [
+        meridianOpen,
+        { jobLevel: 'job_meridian_secanalyst', gte: 6 },
+        { skill: 'business', gte: 40 },
+        { skill: 'opsec', gte: 55 },
+      ],
+    },
+    perk: 'A director\'s salary and a director\'s access: heat cools faster.',
+    mods: [
+      { key: 'heat.decay', add: 0.3 },
+      { key: 'check.business', add: 1 },
+    ],
+  },
+  {
+    id: 'job_coop_partner',
+    title: 'Collective Partner & Principal Architect',
+    employer: 'Lumen Code Collective',
+    track: 'management',
+    desc: 'You are a name on the door now, painted by hand above the bakery. You pick the clients, turn down the ugly ones, and design the systems the other members build. When the co-op votes on coffee, you break the tie. Power, finally.',
+    pay: 360,
+    shiftStart: 10,
+    hours: 7,
+    skillXp: { programming: 4, business: 4, social: 1 },
+    stressPerHour: 1.4,
+    energyPerHour: 3.2,
+    maxLevel: 25,
+    req: { all: [{ jobLevel: 'job_coop_dev', gte: 6 }, { skill: 'programming', gte: 65 }, { skill: 'business', gte: 35 }] },
+    perk: 'Your pick of the work: freelance pays much better and goes faster.',
+    mods: [
+      { key: 'freelance.pay', mult: 1.2 },
+      { key: 'freelance.speed', mult: 1.12 },
+    ],
+  },
+]
+
+const startup: JobDef[] = [
+  {
+    id: 'job_startup_engineer',
+    title: 'Founding Engineer',
+    employer: 'Driftwood Labs (six people, one garage in Millgate)',
+    track: 'startup',
+    desc: 'Six people in a converted garage building a thing that lets small businesses take orders on the web. The salary is a joke; the equity is a lottery ticket; the founder believes in you in a way that is either inspiring or a medical condition. Beanbags. So many beanbags.',
+    pay: 120,
+    shiftStart: 11,
+    hours: 10,
+    skillXp: { programming: 5, business: 3, systems: 1 },
+    stressPerHour: 2.0,
+    energyPerHour: 4.2,
+    maxLevel: 25,
+    req: {
+      all: [
+        { day: true, gte: dayOf(2004, 3, 1) },
+        { skill: 'programming', gte: 40 },
+        { skill: 'business', gte: 20 },
+        { flag: 'job.offer.driftwood' },
+      ],
+    },
+    visible: { all: [{ day: true, gte: dayOf(2004, 3, 1) }, { skill: 'programming', gte: 30 }] },
+    perk: 'Startup grind: you learn at twice the speed you sleep.',
+    mods: [
+      { key: 'xp.programming', mult: 1.15 },
+      { key: 'xp.business', mult: 1.15 },
+    ],
+  },
+  {
+    id: 'job_startup_cto',
+    title: 'Chief Technology Officer',
+    employer: 'Driftwood Labs',
+    track: 'startup',
+    desc: 'Driftwood made it out of the garage: a real office with real windows, forty people, and a term sheet with a number on it that makes your mother sit down. You are the CTO. You are also, at 2 a.m., still the person who fixes the server.',
+    pay: 620,
+    shiftStart: 9,
+    hours: 10,
+    skillXp: { business: 4, programming: 3, social: 2 },
+    stressPerHour: 2.2,
+    energyPerHour: 3.8,
+    maxLevel: 25,
+    req: { all: [{ jobLevel: 'job_startup_engineer', gte: 8 }, { skill: 'programming', gte: 60 }, { skill: 'business', gte: 45 }] },
+    perk: 'Equity, a title, and a reputation: every check you make at a table gets +1.',
+    mods: [{ key: 'check.all', add: 1 }],
+  },
+]
+
+export default defineContent({ jobs: [...security, ...management, ...startup] })

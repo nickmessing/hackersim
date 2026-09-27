@@ -1,0 +1,456 @@
+/*
+ * HackerSim desktop shell — chrome tokens (window frames, taskbar, start menu, tray), the
+ * housing wallpapers, the CRT overlay and shared keyframes. Component styles stay scoped and read
+ * these tokens; the "classic" skin overrides them under [data-skin='classic'].
+ */
+:root {
+  --tb-h: 30px;
+  --font-title: 'Trebuchet MS', Tahoma, Verdana, sans-serif;
+  --font-emoji: 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', 'Twemoji Mozilla', sans-serif;
+  --font-serif: Georgia, 'Times New Roman', serif;
+
+  /* Window frame */
+  --frame-bw: 3px;
+  --frame-bw-top: 0px;
+  --frame-pad: 0px;
+  --frame-radius: 8px 8px 0 0;
+  --frame-active: #0831d9;
+  --frame-inactive: #7a96df;
+  --frame-bevel: 0 0 0 transparent;
+  --title-h: 28px;
+  --title-font: bold 13px var(--font-title);
+  --title-bg: linear-gradient(
+    to bottom,
+    #0997ff 0%,
+    #0053ee 8%,
+    #0050ee 40%,
+    #0066ff 88%,
+    #0066ff 93%,
+    #005bff 95%,
+    #003dd7 96%,
+    #003dd7 100%
+  );
+  --title-bg-inactive: linear-gradient(
+    to bottom,
+    #7697e7 0%,
+    #7e9ee3 3%,
+    #94afe8 6%,
+    #97b4e9 8%,
+    #82a5e4 14%,
+    #7c9fe2 17%,
+    #7996de 25%,
+    #7b99e1 56%,
+    #82a9e9 81%,
+    #80a5e7 89%,
+    #7b96e1 94%,
+    #7a93df 97%,
+    #abbae3 100%
+  );
+  --title-fg: #ffffff;
+  --title-fg-inactive: #d8e4f8;
+  --title-shadow: 1px 1px 1px #0f1089;
+  --title-radius: 7px 7px 0 0;
+
+  /* Caption buttons (minimize / maximize / close) */
+  --cap-w: 21px;
+  --cap-h: 21px;
+  --cap-radius: 3px;
+  --cap-border: 1px solid #ffffff;
+  --cap-bg: radial-gradient(circle at 90% 90%, #0054e9 0%, #2263d5 55%, #4479e4 70%, #a3bbec 90%, #ffffff 100%);
+  --cap-bg-hover: radial-gradient(circle at 90% 90%, #0b63ff 0%, #3b7bf0 55%, #5f93f4 70%, #bcd0f7 90%, #ffffff 100%);
+  --cap-close-bg: radial-gradient(circle at 90% 90%, #cc4600 0%, #dc6527 55%, #cd7546 70%, #ffccb2 90%, #ffffff 100%);
+  --cap-close-hover: radial-gradient(circle at 90% 90%, #e45000 0%, #ef7a3d 55%, #e6875a 70%, #ffdac8 90%, #ffffff 100%);
+  --cap-fg: #ffffff;
+  --cap-bevel: 0 0 0 transparent;
+  --cap-bevel-pressed: inset 1px 1px 2px rgb(0 0 0 / 35%);
+
+  /* Taskbar */
+  --tb-bg: linear-gradient(
+    to bottom,
+    #1f2f86 0%,
+    #3165c4 3%,
+    #3682e5 6%,
+    #4490e6 10%,
+    #3883e5 12%,
+    #2b71e0 15%,
+    #2663da 18%,
+    #235bd6 20%,
+    #2258d5 23%,
+    #2157d6 38%,
+    #245ddb 54%,
+    #2562df 86%,
+    #245fdc 89%,
+    #2158d4 92%,
+    #1d4ec0 95%,
+    #1941a5 98%
+  );
+  --tb-fg: #ffffff;
+  --tb-btn-bg: linear-gradient(to bottom, #5a9bfb 0%, #3c81f3 12%, #3c81f3 85%, #2a6ad8 100%);
+  --tb-btn-hover: linear-gradient(to bottom, #75b0ff 0%, #53a3ff 12%, #4f98fb 85%, #3b7fe8 100%);
+  --tb-btn-active: linear-gradient(to bottom, #1a4aae 0%, #1e52b7 20%, #1e52b7 100%);
+  --tb-btn-flash: linear-gradient(to bottom, #ffc67a 0%, #fa9d2c 15%, #f08c16 85%, #d97a0a 100%);
+  --tb-btn-radius: 3px;
+  --tb-btn-shadow: inset -1px -1px 0 rgb(0 0 0 / 25%), inset 1px 1px 0 rgb(255 255 255 / 25%);
+  --tb-btn-active-shadow: inset 1px 1px 2px rgb(0 0 0 / 55%);
+  --start-bg: linear-gradient(to bottom, #52b152 0%, #3fa03f 30%, #2f8a2f 55%, #378f37 80%, #5cb85c 100%);
+  --start-bg-hover: linear-gradient(to bottom, #63c563 0%, #4db04d 30%, #3b9a3b 55%, #43a043 80%, #6dc96d 100%);
+  --start-bg-open: linear-gradient(to bottom, #2c7a2c 0%, #286f28 50%, #2f7f2f 100%);
+  --start-fg: #ffffff;
+  --start-radius: 0 12px 12px 0;
+  --start-font: bold italic 17px var(--font-title);
+  --start-shadow: 2px 0 4px rgb(0 0 0 / 35%), inset 0 1px 0 rgb(255 255 255 / 35%);
+  --tray-bg: linear-gradient(
+    to bottom,
+    #0c59b9 1%,
+    #139ee9 6%,
+    #18b5f2 10%,
+    #139beb 14%,
+    #1290e8 19%,
+    #0d8dea 63%,
+    #0d9ff1 81%,
+    #0f9eed 88%,
+    #119be9 91%,
+    #1392e2 94%,
+    #137ed7 97%,
+    #095bc9 100%
+  );
+  --tray-border: #1042af;
+  --tray-fg: #ffffff;
+  --tray-btn-hover: rgb(255 255 255 / 18%);
+  --tray-btn-active: rgb(0 0 60 / 35%);
+
+  /* Start menu */
+  --sm-border: #1c55c9;
+  --sm-head: linear-gradient(
+    to bottom,
+    #1868ce 0%,
+    #0e60cb 12%,
+    #0e60cb 20%,
+    #1164cf 32%,
+    #1667cf 33%,
+    #1b6cd3 47%,
+    #1e70d9 54%,
+    #2476dc 60%,
+    #297ae0 65%,
+    #3482e3 77%,
+    #3786e5 79%,
+    #428ee9 90%,
+    #4791eb 100%
+  );
+  --sm-head-fg: #ffffff;
+  --sm-left: #ffffff;
+  --sm-right: #d3e5fa;
+  --sm-right-border: #95bdee;
+  --sm-foot: linear-gradient(to bottom, #4282d6 0%, #3b85e0 5%, #418ae3 17%, #3786e4 26%, #2e7ee1 39%, #2374df 49%, #196edb 62%, #1468d8 75%, #0f5fd3 100%);
+  --sm-hover: #316ac5;
+  --sm-hover-fg: #ffffff;
+  --sm-radius: 8px 8px 0 0;
+
+  /* Popups, balloons, overlays */
+  --balloon-bg: #ffffe1;
+  --balloon-border: #000000;
+  --overlay-dim: rgb(8 16 40 / 45%);
+  --bevel-raised: 0 0 0 transparent;
+  --bevel-sunken: 0 0 0 transparent;
+  --bevel-field: 0 0 0 transparent;
+  --badge-bg: #e81123;
+  --badge-fg: #ffffff;
+  --icon-label-fg: #ffffff;
+  --icon-label-shadow: 1px 1px 1px rgb(0 0 0 / 85%), 0 0 3px rgb(0 0 0 / 50%);
+  --icon-sel: rgb(49 106 197 / 85%);
+}
+
+:root[data-skin='classic'] {
+  --font-title: 'MS Sans Serif', 'Microsoft Sans Serif', Arial, sans-serif;
+  --frame-bw: 0px;
+  --frame-bw-top: 0px;
+  --frame-pad: 3px;
+  --frame-radius: 0;
+  --frame-active: #c0c0c0;
+  --frame-inactive: #c0c0c0;
+  --frame-bevel: inset -1px -1px #0a0a0a, inset 1px 1px #dfdfdf, inset -2px -2px #808080, inset 2px 2px #ffffff;
+  --title-h: 20px;
+  --title-font: bold 11px var(--font-ui);
+  --title-bg: linear-gradient(90deg, #000080, #1084d0);
+  --title-bg-inactive: linear-gradient(90deg, #808080, #b5b5b5);
+  --title-fg-inactive: #d4d0c8;
+  --title-shadow: none;
+  --title-radius: 0;
+  --cap-w: 16px;
+  --cap-h: 14px;
+  --cap-radius: 0;
+  --cap-border: 0 solid transparent;
+  --cap-bg: #c0c0c0;
+  --cap-bg-hover: #c0c0c0;
+  --cap-close-bg: #c0c0c0;
+  --cap-close-hover: #c0c0c0;
+  --cap-fg: #000000;
+  --cap-bevel: inset -1px -1px #0a0a0a, inset 1px 1px #ffffff, inset -2px -2px #808080, inset 2px 2px #dfdfdf;
+  --cap-bevel-pressed: inset -1px -1px #ffffff, inset 1px 1px #0a0a0a, inset -2px -2px #dfdfdf, inset 2px 2px #808080;
+
+  --tb-h: 30px;
+  --tb-bg: #c0c0c0;
+  --tb-fg: #000000;
+  --tb-btn-bg: #c0c0c0;
+  --tb-btn-hover: #c0c0c0;
+  --tb-btn-active: repeating-conic-gradient(#ffffff 0% 25%, #dfdfdf 0% 50%) 0 0 / 2px 2px;
+  --tb-btn-flash: #000080;
+  --tb-btn-radius: 0;
+  --tb-btn-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #ffffff, inset -2px -2px #808080, inset 2px 2px #dfdfdf;
+  --tb-btn-active-shadow: inset -1px -1px #ffffff, inset 1px 1px #0a0a0a, inset -2px -2px #dfdfdf, inset 2px 2px #808080;
+  --start-bg: #c0c0c0;
+  --start-bg-hover: #c0c0c0;
+  --start-bg-open: #c0c0c0;
+  --start-fg: #000000;
+  --start-radius: 0;
+  --start-font: bold 12px var(--font-ui);
+  --start-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #ffffff, inset -2px -2px #808080, inset 2px 2px #dfdfdf;
+  --tray-bg: #c0c0c0;
+  --tray-border: #808080;
+  --tray-fg: #000000;
+  --tray-btn-hover: rgb(0 0 0 / 6%);
+  --tray-btn-active: rgb(0 0 0 / 14%);
+
+  --sm-border: #c0c0c0;
+  --sm-head: linear-gradient(90deg, #000080, #1084d0);
+  --sm-left: #c0c0c0;
+  --sm-right: #c0c0c0;
+  --sm-right-border: #808080;
+  --sm-foot: #c0c0c0;
+  --sm-hover: #000080;
+  --sm-radius: 0;
+
+  --bevel-raised: inset -1px -1px #0a0a0a, inset 1px 1px #ffffff, inset -2px -2px #808080, inset 2px 2px #dfdfdf;
+  --bevel-sunken: inset -1px -1px #ffffff, inset 1px 1px #0a0a0a, inset -2px -2px #dfdfdf, inset 2px 2px #808080;
+  --bevel-field: inset -1px -1px #ffffff, inset 1px 1px #808080;
+  --icon-sel: #000080;
+}
+
+/* ── Drag / resize: no text selection, consistent cursor ───────────────────── */
+body.hs-dragging,
+body.hs-dragging * {
+  user-select: none !important;
+}
+body.hs-dragging iframe {
+  pointer-events: none;
+}
+
+/* ── Scrollbars inside program windows (period flavour, both skins) ─────────── */
+.hs-window {
+  scrollbar-color: #c1d3fb #f4f3ee;
+}
+:root[data-skin='classic'] .hs-window {
+  scrollbar-color: #c0c0c0 #dfdfdf;
+}
+.hs-window ::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+}
+.hs-window ::-webkit-scrollbar-track {
+  background: #f4f3ee;
+}
+.hs-window ::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #c8d6fb, #b9cdf7 50%, #adc3f3);
+  border: 1px solid #fff;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 1px #9eb6ea;
+}
+:root[data-skin='classic'] .hs-window ::-webkit-scrollbar-track {
+  background: repeating-conic-gradient(#ffffff 0% 25%, #dfdfdf 0% 50%) 0 0 / 2px 2px;
+}
+:root[data-skin='classic'] .hs-window ::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  border: 0;
+  border-radius: 0;
+  box-shadow:
+    inset -1px -1px #0a0a0a,
+    inset 1px 1px #ffffff,
+    inset -2px -2px #808080,
+    inset 2px 2px #dfdfdf;
+}
+
+/* ── Wallpapers: one per housing tier (pure CSS, no images) ──────────────── */
+.hs-wp {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  transition: filter 1.5s ease;
+}
+/* Tier 0 — "Clouds": the wallpaper that came with the family PC. */
+.hs-wp-0 {
+  background:
+    radial-gradient(ellipse 16% 7% at 18% 22%, rgb(255 255 255 / 90%), transparent 70%),
+    radial-gradient(ellipse 12% 6% at 25% 19%, rgb(255 255 255 / 80%), transparent 70%),
+    radial-gradient(ellipse 10% 5% at 13% 25%, rgb(255 255 255 / 70%), transparent 70%),
+    radial-gradient(ellipse 22% 8% at 68% 16%, rgb(255 255 255 / 85%), transparent 70%),
+    radial-gradient(ellipse 14% 6% at 76% 13%, rgb(255 255 255 / 70%), transparent 70%),
+    radial-gradient(ellipse 18% 7% at 58% 52%, rgb(255 255 255 / 75%), transparent 70%),
+    radial-gradient(ellipse 11% 5% at 64% 49%, rgb(255 255 255 / 65%), transparent 70%),
+    radial-gradient(ellipse 26% 9% at 32% 74%, rgb(255 255 255 / 80%), transparent 70%),
+    radial-gradient(ellipse 12% 5% at 40% 71%, rgb(255 255 255 / 65%), transparent 70%),
+    radial-gradient(ellipse 14% 6% at 90% 40%, rgb(255 255 255 / 70%), transparent 70%),
+    radial-gradient(ellipse 20% 7% at 84% 86%, rgb(255 255 255 / 70%), transparent 70%),
+    linear-gradient(to bottom, #2f6fc6 0%, #5b98e0 50%, #9cc8f0 100%);
+}
+/* The classic skin ships with the plain teal of a fresh install. */
+:root[data-skin='classic'] .hs-wp-0 {
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 45%, rgb(255 255 255 / 6%), transparent 70%),
+    #008080;
+}
+/* Tier 1 — "Grid": the first room of your own; green phosphor energy. */
+.hs-wp-1 {
+  background:
+    linear-gradient(rgb(0 255 170 / 7%) 1px, transparent 1px) 0 0 / 32px 32px,
+    linear-gradient(90deg, rgb(0 255 170 / 7%) 1px, transparent 1px) 0 0 / 32px 32px,
+    radial-gradient(ellipse 70% 45% at 50% 110%, rgb(20 160 110 / 55%), transparent 70%),
+    radial-gradient(ellipse 40% 30% at 85% 10%, rgb(30 90 160 / 35%), transparent 70%),
+    linear-gradient(to bottom, #030d0a 0%, #06201a 60%, #0a3024 100%);
+}
+/* Tier 2 — "Rolling Hills": a real apartment, a real window, a real view (almost). */
+.hs-wp-2 {
+  background:
+    radial-gradient(ellipse 95% 42% at 28% 102%, #3a9a2c 0%, #52b336 45%, #69c443 58%, transparent 60%),
+    radial-gradient(ellipse 80% 38% at 88% 106%, #2a7f26 0%, #45a032 50%, #5db83b 60%, transparent 62%),
+    radial-gradient(ellipse 22% 7% at 30% 26%, rgb(255 255 255 / 75%), transparent 70%),
+    radial-gradient(ellipse 14% 5% at 36% 23%, rgb(255 255 255 / 60%), transparent 70%),
+    radial-gradient(ellipse 18% 6% at 72% 18%, rgb(255 255 255 / 65%), transparent 70%),
+    linear-gradient(to bottom, #1f62cf 0%, #4b8fe8 45%, #9fcdf6 72%, #c9e4fa 100%);
+}
+/* Tier 3 — "Aurora": you can afford a nicer monitor and it shows. */
+.hs-wp-3 {
+  background:
+    radial-gradient(ellipse 55% 35% at 28% 30%, rgb(60 230 170 / 50%), transparent 70%),
+    radial-gradient(ellipse 45% 32% at 70% 38%, rgb(150 90 240 / 48%), transparent 70%),
+    radial-gradient(ellipse 80% 25% at 50% 62%, rgb(40 160 230 / 30%), transparent 70%),
+    radial-gradient(1px 1px at 12% 18%, #fff, transparent),
+    radial-gradient(1px 1px at 34% 8%, #fff, transparent),
+    radial-gradient(1px 1px at 58% 14%, #fff, transparent),
+    radial-gradient(1px 1px at 82% 9%, #fff, transparent),
+    radial-gradient(1px 1px at 91% 27%, #fff, transparent),
+    linear-gradient(to bottom, #050a22 0%, #120f48 60%, #24123f 100%);
+}
+/* Tier 4 — "Carbon": loft living, matte black everything. */
+.hs-wp-4 {
+  background:
+    radial-gradient(circle at 72% 28%, rgb(70 150 255 / 38%), transparent 42%),
+    radial-gradient(circle at 20% 85%, rgb(255 120 40 / 16%), transparent 40%),
+    repeating-linear-gradient(45deg, rgb(255 255 255 / 3%) 0 3px, transparent 3px 6px),
+    repeating-linear-gradient(-45deg, rgb(0 0 0 / 25%) 0 3px, transparent 3px 6px),
+    linear-gradient(to bottom, #1c1f25, #121418);
+}
+/* Tier 5 — "Skyline": Port Lumen at dusk, from the top floor. */
+.hs-wp-5 {
+  background:
+    linear-gradient(#140c26, #140c26) 2% 100% / 7% 34% no-repeat,
+    linear-gradient(#1b1030, #1b1030) 8% 100% / 5% 48% no-repeat,
+    linear-gradient(#120a22, #120a22) 13% 100% / 8% 28% no-repeat,
+    linear-gradient(#1a0f2e, #1a0f2e) 22% 100% / 4% 58% no-repeat,
+    linear-gradient(#140c26, #140c26) 26% 100% / 9% 40% no-repeat,
+    linear-gradient(#1d1234, #1d1234) 36% 100% / 6% 66% no-repeat,
+    linear-gradient(#120a22, #120a22) 42% 100% / 10% 36% no-repeat,
+    linear-gradient(#1b1030, #1b1030) 53% 100% / 5% 52% no-repeat,
+    linear-gradient(#140c26, #140c26) 58% 100% / 8% 30% no-repeat,
+    linear-gradient(#1d1234, #1d1234) 67% 100% / 4% 72% no-repeat,
+    linear-gradient(#120a22, #120a22) 71% 100% / 9% 44% no-repeat,
+    linear-gradient(#1a0f2e, #1a0f2e) 81% 100% / 6% 56% no-repeat,
+    linear-gradient(#140c26, #140c26) 88% 100% / 12% 32% no-repeat,
+    radial-gradient(circle at 50% 62%, rgb(255 210 120 / 95%) 0, rgb(255 150 80 / 70%) 5%, transparent 18%),
+    linear-gradient(to bottom, #2a1a5e 0%, #6b2f7a 35%, #d0567a 62%, #f79a5c 80%, #ffd08a 100%);
+}
+.hs-wp-5::after {
+  /* harbour haze and a few lit windows low on the towers */
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(1.5px 2px at 9.5% 78%, rgb(255 214 130 / 80%), transparent),
+    radial-gradient(1.5px 2px at 10.6% 84%, rgb(255 214 130 / 70%), transparent),
+    radial-gradient(1.5px 2px at 24.2% 70%, rgb(255 214 130 / 75%), transparent),
+    radial-gradient(1.5px 2px at 37.5% 62%, rgb(255 214 130 / 80%), transparent),
+    radial-gradient(1.5px 2px at 38.4% 74%, rgb(255 214 130 / 65%), transparent),
+    radial-gradient(1.5px 2px at 54.1% 76%, rgb(255 214 130 / 75%), transparent),
+    radial-gradient(1.5px 2px at 67.8% 58%, rgb(255 214 130 / 80%), transparent),
+    radial-gradient(1.5px 2px at 68.6% 66%, rgb(255 214 130 / 60%), transparent),
+    radial-gradient(1.5px 2px at 82.3% 72%, rgb(255 214 130 / 75%), transparent),
+    radial-gradient(1.5px 2px at 83.4% 80%, rgb(255 214 130 / 65%), transparent),
+    linear-gradient(to top, rgb(255 170 110 / 18%), transparent 28%);
+}
+
+/* The story darkens the room a little each act. */
+.hs-wp-dim {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 40%, rgb(20 0 30 / 0%) 30%, rgb(10 0 20 / 70%) 100%), rgb(15 5 25 / 40%);
+  transition: opacity 2s ease;
+}
+
+/* ── CRT overlay ───────────────────────────────────────────────────────────── */
+.hs-crt {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background: repeating-linear-gradient(to bottom, transparent 0, transparent 2px, rgb(0 0 0 / 9%) 2px, rgb(0 0 0 / 9%) 3px);
+  box-shadow: inset 0 0 140px rgb(0 0 0 / 38%);
+}
+.hs-crt::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 0%, rgb(255 255 255 / 3.5%) 50%, transparent 100%) 0 0 / 100% 18% no-repeat;
+  animation: hs-crt-roll 9s linear infinite;
+}
+.hs-crt::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgb(255 255 255 / 1.5%);
+  animation: hs-crt-flicker 5s steps(1) infinite;
+}
+
+@keyframes hs-crt-roll {
+  from {
+    background-position: 0 -20%;
+  }
+  to {
+    background-position: 0 120%;
+  }
+}
+@keyframes hs-crt-flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  47% {
+    opacity: 0.4;
+  }
+  48% {
+    opacity: 1;
+  }
+  79% {
+    opacity: 0.6;
+  }
+  80% {
+    opacity: 1;
+  }
+}
+@keyframes hs-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0.25;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hs-crt::after,
+  .hs-crt::before {
+    animation: none;
+  }
+}
