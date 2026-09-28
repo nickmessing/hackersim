@@ -45,7 +45,7 @@ is make-believe: skill checks, dice and an invented terminal.
 
 ## Download
 
-Linux builds (`.deb`, `.rpm`, `.AppImage`) are built automatically by GitHub Actions:
+Linux (`.deb`, `.rpm`, `.AppImage`) and Windows (installer `.exe`, `.msi`, portable `.exe`) builds are made automatically by GitHub Actions:
 
 - **Latest build of `main`:** the [Nightly release](https://github.com/nickmessing/hackersim/releases/tag/nightly)
 - **Stable versions:** [Releases](https://github.com/nickmessing/hackersim/releases) (push a `v*` tag to publish one)
@@ -53,8 +53,11 @@ Linux builds (`.deb`, `.rpm`, `.AppImage`) are built automatically by GitHub Act
 ```bash
 sudo dnf install ./hackersim-*.x86_64.rpm      # Fedora / RHEL
 sudo apt install ./hackersim_*_amd64.deb       # Debian / Ubuntu
-chmod +x HackerSim_*.AppImage && ./HackerSim_*.AppImage   # anywhere
+chmod +x HackerSim_*.AppImage && ./HackerSim_*.AppImage   # any Linux
 ```
+
+On Windows, run `HackerSim_*_x64-setup.exe` (or the `.msi`), or just start the portable `.exe`. Windows 10/11
+already ship the WebView2 runtime the game uses.
 
 ## Play
 

@@ -78,9 +78,55 @@ jobs:
           path: out/*
           if-no-files-found: error
 
+  bundle-windows:
+    name: Windows bundles (NSIS installer, MSI, portable exe)
+    needs: check
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri -> target
+
+      - run: npm ci
+
+      - name: Build bundles
+        run: npx tauri build --bundles nsis,msi
+
+      - name: Collect artifacts
+        id: collect
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then LABEL="${GITHUB_REF_NAME#v}"; else LABEL="${VERSION}-$(git rev-parse --short HEAD)"; fi
+          mkdir -p out
+          R=src-tauri/target/release
+          cp "$R"/bundle/nsis/*.exe "out/HackerSim_${LABEL}_x64-setup.exe"
+          cp "$R"/bundle/msi/*.msi  "out/HackerSim_${LABEL}_x64.msi"
+          cp "$R"/hackersim.exe     "out/HackerSim_${LABEL}_x64-portable.exe"
+          (cd out && sha256sum * > SHA256SUMS-windows.txt)
+          ls -la out
+          echo "label=$LABEL" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hackersim-windows-${{ steps.collect.outputs.label }}
+          path: out/*
+          if-no-files-found: error
+
   release:
     name: Publish release
-    needs: bundle
+    needs: [bundle, bundle-windows]
     if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main')
     runs-on: ubuntu-latest
     env:
@@ -107,6 +153,6 @@ jobs:
           gh release delete nightly --yes --cleanup-tag || true
           gh release create nightly out/* \
             --title "Nightly build ($(git rev-parse --short HEAD))" \
-            --notes "Automatic build of the latest \`main\` ($(git rev-parse --short HEAD)). Download the .deb, .rpm or .AppImage below. For stable versions see the tagged releases." \
+            --notes "Automatic build of the latest \`main\` ($(git rev-parse --short HEAD)). Linux: .deb, .rpm or .AppImage. Windows: the -setup.exe installer, the .msi, or the portable .exe (needs the Microsoft Edge WebView2 runtime, which Windows 10/11 already include). For stable versions see the tagged releases." \
             --prerelease \
             --target "$GITHUB_SHA"
