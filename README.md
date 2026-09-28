@@ -1,5 +1,7 @@
 # HackerSim 2001
 
+[![Build](https://github.com/nickmessing/hackersim/actions/workflows/build.yml/badge.svg)](https://github.com/nickmessing/hackersim/actions/workflows/build.yml)
+
 **A hacker & programmer life simulator with a branching CRPG story.** A love letter to the
 obscure 2000s freeware "hacker life" sims — rebuilt as a retro fake desktop where time keeps
 moving, your schedule runs your life, and every choice leaves a mark.
@@ -40,6 +42,19 @@ is make-believe: skill checks, dice and an invented terminal.
 - **Something always happening** — an event director draws from ~120 random events and dozens of
   side quests, reacting to your job, housing, relationships, background and traits.
 - **Fully offline** — plays in the browser or as a fullscreen desktop app with no internet access.
+
+## Download
+
+Linux builds (`.deb`, `.rpm`, `.AppImage`) are built automatically by GitHub Actions:
+
+- **Latest build of `main`:** the [Nightly release](https://github.com/nickmessing/hackersim/releases/tag/nightly)
+- **Stable versions:** [Releases](https://github.com/nickmessing/hackersim/releases) (push a `v*` tag to publish one)
+
+```bash
+sudo dnf install ./hackersim-*.x86_64.rpm      # Fedora / RHEL
+sudo apt install ./hackersim_*_amd64.deb       # Debian / Ubuntu
+chmod +x HackerSim_*.AppImage && ./HackerSim_*.AppImage   # anywhere
+```
 
 ## Play
 
