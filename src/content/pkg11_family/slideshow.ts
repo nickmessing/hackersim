@@ -86,7 +86,7 @@ const quest: QuestDef = {
           text: 'Spend four Sunday evenings digitizing the boxes',
           when: { var: 'side.slideshow_count', gte: 4 },
           progress: { of: { var: 'side.slideshow_count' }, target: 4 },
-          hint: 'On a Sunday, set your social block to Mom, Dad, or Kim and be home. The moment passes after two months — the boxes are fading.',
+          hint: 'Keep a Social block in your Daily Planner and pick Mom, Dad or Kim as the social focus (People window). Each week you spend time with family counts as one Sunday. The moment passes after two months — the boxes are fading.',
         },
       ],
       onComplete: [

@@ -15,6 +15,7 @@
  * back down a rung; the guard triggers restore the recorded rung while that NPC is still your
  * partner. Breaking up goes through `breakUpWith`, which zeroes the rung.
  */
+import { DAYS_PER_STEP } from '@/engine/balance'
 import { defineContent } from '@/engine/registry'
 import type { Cond, Effect, RomanceState, TextPart, TriggerDef } from '@/engine/types'
 
@@ -115,7 +116,8 @@ export function sundays(from: number, to: number): number[] {
  */
 export function contactOn(npcs: readonly string[], days: number[]): Cond {
   return {
-    any: days.map(d => ({ all: [{ day: true, eq: d }, { any: npcs.map(n => ({ var: `aff.last.${n}`, gte: d })) }] })),
+    // Weekly turns: contact stamps carry the turn's start day, so "that day" means "that week".
+    any: days.map(d => ({ all: [{ day: true, eq: d }, { any: npcs.map(n => ({ var: `aff.last.${n}`, gte: d - (d % DAYS_PER_STEP) })) }] })),
   }
 }
 

@@ -1,4 +1,4 @@
-import { SKILL_LABELS } from './balance'
+import { DAYS_PER_STEP, SKILL_LABELS } from './balance'
 import { ageOn } from './calendar'
 import { money } from './format'
 import { C } from './registry'
@@ -24,6 +24,19 @@ const STAT_LABELS: Record<StatId, string> = {
 
 function asArray<T>(x: T | T[]): T[] {
   return Array.isArray(x) ? x : [x]
+}
+
+/**
+ * Weekly turns: the calendar lands only on every DAYS_PER_STEP-th day, so a `day` condition holds if
+ * ANY calendar day of the current turn [day, day + DAYS_PER_STEP - 1] satisfies it. Exact dates
+ * (holidays, "this Sunday") and windows narrower than a week would otherwise be skipped entirely.
+ */
+function dayInTurn(day: number, r: { gte?: number; lte?: number; eq?: number }): boolean {
+  const last = day + DAYS_PER_STEP - 1
+  if (r.gte !== undefined && last < r.gte) return false
+  if (r.lte !== undefined && day > r.lte) return false
+  if (r.eq !== undefined && (r.eq < day || r.eq > last)) return false
+  return true
 }
 
 function inRange(v: number, r: { gte?: number; lte?: number; eq?: number }): boolean {
@@ -66,7 +79,7 @@ export function evalCond(state: GameState, cond: Cond | undefined): boolean {
   if ('var' in cond) return inRange(state.vars[cond.var] ?? 0, cond)
   if ('faction' in cond) return inRange(state.factions[cond.faction] ?? 0, cond)
   if ('age' in cond) return inRange(ageOn(state.time.day), cond)
-  if ('day' in cond) return inRange(state.time.day, cond)
+  if ('day' in cond) return dayInTurn(state.time.day, cond)
   if ('hour' in cond) return inRange(state.time.hour, cond)
   if ('n' in cond) return inRange(numRef(state, cond.n), cond)
   if ('npc' in cond) {
