@@ -20,6 +20,7 @@
  * requires having no day job; players with a night shift can still enroll from the Skills window.
  * `fac.lsu.days` counts days enrolled and paces q2/q3.
  */
+import { DAYS_PER_STEP } from '@/engine/balance'
 import { defineContent } from '@/engine/registry'
 import type { BuffDef, Choice, Cond, Effect, SkillCheck } from '@/engine/types'
 
@@ -1072,7 +1073,7 @@ export default defineContent({
       effects: [{ scene: 'lsu_admissions_mail' }],
     },
     // Days enrolled at LSU — paces Okoro and the thesis.
-    { id: 'trig_lsu_day', when: atLsu, once: false, cooldownDays: 1, atHour: 12, effects: [{ var: 'fac.lsu.days', add: 1 }] },
+    { id: 'trig_lsu_day', when: atLsu, once: false, cooldownDays: 1, atHour: 12, effects: [{ var: 'fac.lsu.days', add: DAYS_PER_STEP }] },
     // Left school (dropout / expelled) mid-arc: the open LSU beats close.
     {
       id: 'trig_lsu_left_school',

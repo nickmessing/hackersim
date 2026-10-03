@@ -10,6 +10,7 @@
  * Reads: `life.partner`, partner romance state, `npc.mira.rivalry` (PKG-01), fates for the guest
  * list, `w.cathode_open`, `fac.aperture.client` (PKG-02) for flavor.
  */
+import { DAYS_PER_STEP } from '@/engine/balance'
 import { defineContent } from '@/engine/registry'
 import type { Choice, Cond, Effect, QuestDef, SceneDef, TriggerDef } from '@/engine/types'
 import {
@@ -18,13 +19,12 @@ import {
   around,
   breakUpWith,
   byPartner,
-  dayRange,
   forPartner,
   hasPartner,
   momHere,
   momPassed,
   partnerAffinity,
-  partnerContactOn,
+  PARTNERS,
   partnerIs,
   partnerRomance,
   romanceTo,
@@ -417,17 +417,32 @@ const confessionFalloutScene: SceneDef = {
 
 // ── side_long_distance — Act III (Schedule) ──────────────────────────────────
 
-/** Days on which the long-distance stretch can be running (Act III onward). */
-const LD_DAYS = dayRange(1500, 3700)
 const LD_TARGET = 20
+
+/**
+ * Weekly turns: the 24 simulated hours of a turn stand for the 7 days of a week, so each social
+ * hour spent with your partner counts as one day together — at most DAYS_PER_STEP per turn.
+ */
+const ldDriftActive: Cond = { all: [{ quest: 'side_long_distance', stage: 'drift' }, { quest: 'side_long_distance', status: 'active' }] }
+const withPartnerNow: Cond = { any: PARTNERS.map(p => ({ all: [partnerIs(p), { flag: 'sys.social_now', eq: p }] })) }
 
 const longDistanceDayTrigger: TriggerDef = {
   id: 'side_long_distance_day',
   once: false,
-  cooldownDays: 1,
-  atHour: 23,
-  when: { all: [{ quest: 'side_long_distance', stage: 'drift' }, { quest: 'side_long_distance', status: 'active' }, partnerContactOn(LD_DAYS)] },
-  effects: [{ var: 'side.long_distance_days', add: 1 }],
+  when: { all: [ldDriftActive, withPartnerNow, { var: 'side.long_distance_week', lte: DAYS_PER_STEP - 1 }] },
+  effects: [
+    { var: 'side.long_distance_days', add: 1 },
+    { var: 'side.long_distance_week', add: 1 },
+  ],
+}
+
+/** New turn, new week: reset the per-week cap. */
+const longDistanceWeekReset: TriggerDef = {
+  id: 'side_long_distance_week_reset',
+  once: false,
+  atHour: 0,
+  when: { var: 'side.long_distance_week', gte: 1 },
+  effects: [{ var: 'side.long_distance_week', set: 0 }],
 }
 
 const longDistanceQuest: QuestDef = {
@@ -452,7 +467,7 @@ const longDistanceQuest: QuestDef = {
           text: 'Spend real time with your partner through the busy stretch',
           when: { var: 'side.long_distance_days', gte: LD_TARGET },
           progress: { of: { var: 'side.long_distance_days' }, target: LD_TARGET },
-          hint: 'Pick your partner in Contacts and paint social blocks on the schedule. Each day you spend time together counts. Ten weeks to find twenty days — the stretch is long, but so is the alternative.',
+          hint: 'Pick your partner as your social focus (People window) and paint Social blocks in the Daily Planner. Every Social hour with them counts as one day together, up to 7 a week: three hours a day gets you there in seven weeks.',
         },
       ],
       onComplete: [{ scene: 'side_long_distance_kept_scene' }, ...forPartner(p => [{ npc: p, affinity: 8 }]), { stat: 'stress', add: -6 }],
@@ -923,5 +938,5 @@ export default defineContent({
     proposalScene,
     weddingScene,
   ],
-  triggers: [confessionFalloutTrigger, longDistanceDayTrigger],
+  triggers: [confessionFalloutTrigger, longDistanceDayTrigger, longDistanceWeekReset],
 })

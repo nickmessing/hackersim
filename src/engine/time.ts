@@ -103,6 +103,10 @@ export function efficiency(state: GameState): number {
 
 export function simulateHour(state: GameState): void {
   const act = currentActivity(state)
+  // `sys.social_now` names who you are spending this simulated hour with (read by "N days
+  // together" counters: under weekly turns each social hour stands for one day of the week).
+   
+  delete state.flags['sys.social_now']
   // Gains accumulate for the whole week this simulated hour stands for.
   const eff = efficiency(state) * DAYS_PER_STEP
   runActivity(state, act, eff)
@@ -219,6 +223,7 @@ function runActivity(state: GameState, act: ActivityId | 'jail' | 'hospital', ef
           const gain = SOCIAL_AFFINITY_PER_HOUR * (1 + state.skills.social.level / 60) * eff
           s.affinity = clamp(s.affinity + gain, -100, 100)
           touchNpc(state, target)
+          state.flags['sys.social_now'] = target
         }
       }
       addSkillXp(state, 'social', PRACTICE_XP_PER_HOUR * eff * 0.8)

@@ -15,6 +15,7 @@
  * CP-D1 E hands off to PKG-06's single "Made" scene, which sets `a4.leverage='made'` only if you take
  * the chair; any other answer brings CP-D1 back (minus the chair) via `trig_a4_made_refused`.
  */
+import { DAYS_PER_STEP } from '@/engine/balance'
 import { defineContent } from '@/engine/registry'
 import type { Choice, Cond, ObjectiveDef, QuestDef } from '@/engine/types'
 import { all, any, flag, not } from './shared'
@@ -141,7 +142,7 @@ export default defineContent({
       atHour: 2,
       cooldownDays: 1,
       when: { quest: Q, status: 'active', stage: 'finales' },
-      effects: [{ var: 'a4.finale_wait', add: 1 }],
+      effects: [{ var: 'a4.finale_wait', add: DAYS_PER_STEP }],
     },
     {
       // Kroll's chair was answered with anything but "yes": CP-D1 comes back around, minus her seat.

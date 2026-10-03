@@ -30,4 +30,25 @@ describe('day conditions under weekly turns', () => {
     simulateHours(s, 24, false)
     expect(s.vars['side.slideshow_count'] ?? 0).toBeGreaterThanOrEqual(1)
   })
+
+  it('Long Distance counts each social hour with your partner as a day, up to 7 a week', () => {
+    const s = createState({ name: 'T', handle: 't', background: '', traits: [], seed: 4 })
+    s.settings.autoPauseDialogs = false
+    unlockAll(s)
+    s.time.day = 1505
+    s.time.day -= s.time.day % balance.DAYS_PER_STEP
+    s.time.hour = 0
+    s.flags['life.partner'] = 'mira'
+    s.npcs.mira = { met: true, affinity: 60, fate: 'normal', romance: 'partner' }
+    startQuest(s, 'side_long_distance')
+    expect(s.quests.side_long_distance?.stage).toBe('drift')
+    for (let h = 17; h < 20; h++) setSlot(s, h, 'social')
+    s.focus.social = 'mira'
+    simulateHours(s, 24, false)
+    expect(s.vars['side.long_distance_days']).toBe(3)
+    // Ten social hours in a week still count as at most 7 days.
+    for (let h = 12; h < 22; h++) setSlot(s, h, 'social')
+    simulateHours(s, 24, false)
+    expect(s.vars['side.long_distance_days']).toBe(10)
+  })
 })

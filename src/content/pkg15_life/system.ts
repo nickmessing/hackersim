@@ -9,6 +9,7 @@
  *  - life_quiet_clock      daily +1 on `life.quiet_days` (every PKG-15 beat resets it).
  *  - trig_director         ~45 quiet days → pull a weighted beat from the act's pool (director.ts).
  */
+import { DAYS_PER_STEP } from '@/engine/balance'
 import { defineContent } from '@/engine/registry'
 import type { Effect, SceneDef, TriggerDef } from '@/engine/types'
 import { QUIET_RESET, actGte, actIs, around, free } from './_shared'
@@ -108,7 +109,7 @@ const triggers: TriggerDef[] = [
     once: false,
     cooldownDays: 1,
     atHour: 0,
-    effects: [{ var: 'life.quiet_days', add: 1 }],
+    effects: [{ var: 'life.quiet_days', add: DAYS_PER_STEP }],
   },
   {
     id: 'trig_director',
